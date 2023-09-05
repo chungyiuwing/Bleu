@@ -1,0 +1,18 @@
+from nltk.translate.bleu_score import sentence_bleu
+
+# Input references and candidate translation
+num_references = int(input("Enter the number of reference translations: "))
+references = []
+for i in range(num_references):
+    reference = input("Enter reference translation {}: ".format(i+1)).split()
+    references.append(reference)
+candidate = input("Enter candidate translation: ").split()
+
+# Calculate BLEU score
+weights = tuple(1.0 / num_references for _ in range(num_references))
+score = sentence_bleu(references, candidate, weights=weights)
+
+# Print BLEU score and individual n-gram scores
+print("BLEU score: %f" % score)
+for i in range(1, num_references+1):
+    print("Individual {}-gram: %f".format(i) % sentence_bleu(references[:i], candidate, weights=weights[:i]))
